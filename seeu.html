@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Terima Kasih</title>
+
+<style>
+*{
+    box-sizing:border-box;
+}
+body{
+    margin:0;
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:linear-gradient(135deg,#e8f5e9,#ffffff);
+    font-family:"Poppins", Arial, sans-serif;
+    padding:20px;
+}
+.box{
+    width:100%;
+    max-width:360px;
+    background:white;
+    padding:32px 24px;
+    border-radius:24px;
+    text-align:center;
+    box-shadow:0 12px 30px rgba(0,0,0,0.1);
+    animation:fadeUp 0.8s ease;
+}
+.box h2{
+    margin:0 0 16px;
+    font-size:22px;
+    font-weight:500;
+}
+.box p{
+    font-size:15px;
+    line-height:1.6;
+    color:#555;
+}
+button{
+    width:100%;
+    margin-top:28px;
+    padding:14px;
+    border:none;
+    border-radius:30px;
+    background:#8bc34a;
+    color:white;
+    font-size:15px;
+    cursor:pointer;
+}
+button:active{
+    transform:scale(0.97);
+}
+
+@keyframes fadeUp{
+    from{opacity:0; transform:translateY(20px);}
+    to{opacity:1; transform:translateY(0);}
+}
+</style>
+</head>
+<body>
+
+<div class="box">
+    <h2>finally we arrive at the last page</h2>
+    <p>
+        Terima kasih sudah berbagi ceritamu hari ini.<br>
+        Hope this site can make your day better, okay?
+    </p>
+    <p>
+        happy and healthy always🚶🏻‍♂️<br>
+    </p>
+    <h2>see u ⛇☃︎</h2>
+
+    <button onclick="location.href='index.html'">
+        Mulai lagi
+    </button>
+</div>
+
+</body>
+</html>

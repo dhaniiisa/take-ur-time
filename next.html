@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Mood Tracker</title>
+
+<style>
+body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #c9bdff, #b9f3ff);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+/* BALOK UTAMA */
+.container {
+    background: #fdeeff;
+    padding: 20px;
+    border-radius: 18px;
+    width: 500px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    text-align: center;
+}
+
+h1 {
+    margin-bottom: 10px;
+}
+
+.moods {
+    display: flex;
+    justify-content: space-between;
+    margin: 20px 0;
+}
+
+.mood {
+    font-size: 28px;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.mood:hover {
+    transform: scale(1.3);
+}
+
+button {
+    margin-top: 10px;
+    padding: 10px;
+    width: 100%;
+    border: none;
+    border-radius: 10px;
+    background: #4facfe;
+    color: white;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+button:hover {
+    opacity: 0.9;
+}
+
+.history {
+    margin-top: 20px;
+    text-align: left;
+}
+
+.history ul {
+    padding-left: 18px;
+    max-height: 150px;
+    overflow-y: auto;
+}
+
+/* TOMBOL NEXT PAGE (DI LUAR BALOK) */
+.next-page {
+    margin-top: 15px;
+    width: 300px;
+}
+
+.next-page button {
+    width: 100%;
+    background: linear-gradient(135deg, #268bff, #89a7ff);
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <h1>kalau kata malio,<br>kamu warna apa hari ini?</h1>
+    <p>Choose your color today</p>
+
+    <div class="moods">
+        <span class="mood" onclick="selectMood('🟡 HAPPY')">🟡</span>
+        <span class="mood" onclick="selectMood('🟢 NORMAL')">🟢</span>
+        <span class="mood" onclick="selectMood('🔵 SAD')">🔵</span>
+        <span class="mood" onclick="selectMood('🔴 MAD')">🔴</span>
+        <span class="mood" onclick="selectMood('🟣 EXCITED')">🟣</span>
+    </div>
+
+    <p id="selectedMood">Haven't chosen a color yet</p>
+
+    <button onclick="saveMood()">Save Mood</button>
+
+    <div class="history">
+        <h3>Mood History</h3>
+        <ul id="moodList"></ul>
+    </div>
+</div>
+
+<!-- TOMBOL DI BAWAH BALOK -->
+<div class="next-page">
+    <button onclick="nextPage()">Next</button>
+</div>
+
+<script>
+let currentMood = "";
+
+function selectMood(mood) {
+    currentMood = mood;
+    document.getElementById("selectedMood").innerText =
+        "Mood hari ini: " + mood;
+}
+
+function saveMood() {
+    if (!currentMood) {
+        alert("Pilih mood dulu!");
+        return;
+    }
+
+    const date = new Date().toLocaleDateString("id-ID");
+    const moods = JSON.parse(localStorage.getItem("moods")) || [];
+
+    moods.push({ date, mood: currentMood });
+    localStorage.setItem("moods", JSON.stringify(moods));
+
+    currentMood = "";
+    document.getElementById("selectedMood").innerText =
+        "Haven't chosen a color yet";
+    loadMood();
+}
+
+function loadMood() {
+    const moodList = document.getElementById("moodList");
+    moodList.innerHTML = "";
+
+    const moods = JSON.parse(localStorage.getItem("moods")) || [];
+    moods.forEach(item => {
+        const li = document.createElement("li");
+        li.textContent = `${item.date} - ${item.mood}`;
+        moodList.appendChild(li);
+    });
+}
+
+function nextPage() {
+    window.location.href = "page3.html";
+}
+
+loadMood();
+</script>
+
+</body>
+</html>

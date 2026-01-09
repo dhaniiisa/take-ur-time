@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MoodBox</title>
+
+<style>
+*{box-sizing:border-box;}
+body{
+    margin:0;
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:linear-gradient(135deg,#d9fdd3,#fffde7);
+    font-family:"Poppins", Arial, sans-serif;
+    padding:20px;
+}
+.container{
+    width:100%;
+    max-width:360px;
+    background:white;
+    padding:28px 22px;
+    border-radius:24px;
+    text-align:center;
+    box-shadow:0 12px 30px rgba(0,0,0,0.12);
+}
+
+/* INPUT */
+.input-area input{
+    width:100%;
+    padding:12px;
+    border-radius:14px;
+    border:1px solid #ccc;
+    margin-bottom:14px;
+}
+.input-area button{
+    width:100%;
+    padding:14px;
+    border:none;
+    border-radius:30px;
+    background:#8bc34a;
+    color:white;
+    font-size:15px;
+    cursor:pointer;
+}
+
+/* MOOD BOX */
+.mood-box{
+    display:none;
+    padding:22px;
+    border-radius:18px;
+    font-size:15px;
+    line-height:1.6;
+    animation:fadeUp .6s ease;
+}
+
+/* COLORS */
+.happy{background:#e8f5e9;color:#2e7d32;}
+.tired{background:#e3f2fd;color:#1565c0;}
+.sad{background:#eceff1;color:#37474f;}
+.angry{background:#ffebee;color:#c62828;}
+.bad{background:#f3e5f5;color:#6a1b9a;}
+.default{background:#f1f8e9;color:#333;}
+
+@keyframes fadeUp{
+    from{opacity:0;transform:translateY(15px);}
+    to{opacity:1;transform:translateY(0);}
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- INPUT -->
+    <div class="input-area" id="inputArea">
+        <h3>Apa mood kamu?</h3>
+        <input type="text" id="moodInput" placeholder="contoh: capek">
+        <button onclick="showMood()">Lanjut</button>
+    </div>
+
+    <!-- RESULT -->
+    <div class="mood-box" id="moodBox"></div>
+
+</div>
+
+<script>
+const moods = {
+happy:{
+class:"happy",
+texts:[
+"Memang harus begitu, semoga senangmu lebih lama besok.",
+"Nikmati bahagianya, semoga esok tetap ringan.",
+"Senang itu layak dirayakan, semoga besok masih ada sisa.",
+"Simpan rasa ini untuk hari berat nanti.",
+"Kamu layak merasakan hal baik.",
+"Jangan buru-buru melepas bahagia ini.",
+"Wajar merasa senang, semoga besok kamu ingat rasa ini.",
+"Bahagia hari ini bukan kebetulan, semoga berlanjut.",
+"Senang hari ini, semoga jadi tenaga untuk besok.",
+"Bahagia sederhana tetap berharga.",
+"Nikmati dulu, besok biar semesta lanjutkan.",
+"Memang seharusnya kamu merasa bahagia.",
+"Bahagia juga perlu diakui.",
+"Senang itu bukan berlebihan.",
+"Ini momen yang pantas dirayakan.",
+"Hari ini kamu cukup.",
+"Biarkan senyum tinggal lebih lama.",
+"Semoga rasa ini menemanimu sampai besok.",
+"Kamu aman di perasaan ini.",
+"Semoga senangmu tidak cepat pergi."
+]},
+tired:{
+class:"tired",
+texts:[
+"Capek itu tanda kamu sudah berusaha.",
+"Istirahat juga bagian dari bertahan.",
+"Capek itu wajar, semoga besok lebih ringan.",
+"Capek bukan tanda kalah, proud of u!",
+"Dunia nggak runtuh kalau kamu berhenti sebentar.",
+"Kamu berhak merasa lelah.",
+"Hari ini kamu sudah cukup.",
+"Tarik napas dulu.",
+"Capek bukan kegagalan.",
+"Kamu nggak sendirian.",
+"Tutup hari dengan lembut.",
+"Boleh berhenti tanpa merasa bersalah.",
+"Badanmu minta jeda.",
+"Kamu sudah melakukan yang kamu bisa.",
+"Lelah hari ini bukan selamanya.",
+"Peluk diri sendiri dulu.",
+"Kamu kuat sampai sejauh ini.",
+"Besok bisa lanjut lagi.",
+"Berhenti sebentar nggak apa-apa.",
+"Kamu tetap berarti."
+]},
+sad:{
+class:"sad",
+texts:[
+"Sedih bukan tanda kamu lemah.",
+"Sedihmu wajar, jangan dipendam sendirian.",
+"Hari ini boleh nggak baik-baik saja.",
+"Air mata juga punya fungsi.",
+"Kamu manusia.",
+"Sedih bukan akhir cerita.",
+"Kamu tetap berharga.",
+"Sedih bukan akhir cerita.",
+"Hari ini boleh runtuh, besok coba bangkit pelan-pelan.",
+"Pelan-pelan, luka bisa sembuh.",
+"Menangis juga bagian dari sembuh.",
+"Bertahan hari ini sudah cukup.",
+"Hari ini boleh lemah.",
+"Kamu nggak berlebihan.",
+"Ada hari lebih ringan nanti.",
+"Sedihmu layak didengar.",
+"Kamu tetap berharga meski sedang sedih.",
+"Kamu tetap berarti.",
+"Tenang, ini akan berlalu.",
+"Hari ini sedih, tapi kamu masih di sini."
+]},
+angry:{
+class:"angry",
+texts:[
+"Marah itu reaksi, bukan sifatmu.",
+"Kamu berhak merasa kesal.",
+"Tarik napas dulu.",
+"Emosi ini akan reda.",
+"Marahmu ada alasannya.",
+"Jangan ambil keputusan sekarang.",
+"Kamu tetap orang baik.",
+"Lepaskan pelan-pelan.",
+"Jangan hukum diri sendiri.",
+"Ambil jarak sebentar.",
+"Marah bukan dosa.",
+"Hari ini kamu butuh tenang.",
+"Kamu nggak jahat.",
+"Emosi juga ingin dimengerti.",
+"Kamu nggak harus menjelaskan semuanya.",
+"Biarkan hati dingin dulu.",
+"Kesal ini sementara.",
+"Kamu masih layak dihargai.",
+"Pelan-pelan ya.",
+"Ini akan lewat."
+]},
+bad:{
+class:"bad",
+texts:[
+"Hari ini nggak harus produktif.",
+"Bad mood bukan kegagalan.",
+"Kamu cuma lagi nggak enak rasa.",
+"Nggak apa-apa kalau nggak mood.",
+"Jangan keras ke diri sendiri.",
+"Hari ini boleh biasa aja.",
+"Mood bisa berubah.",
+"Kamu masih layak dihargai.",
+"Perasaan ini valid.",
+"Kamu nggak kurang apa-apa.",
+"Istirahat bisa bantu.",
+"Hari ini cukup dilewati.",
+"Kamu nggak sendirian.",
+"Bertahan hari ini hebat.",
+"Nggak apa-apa merasa kosong.",
+"Pelan-pelan aja.",
+"Kamu aman.",
+"Ada hari lebih baik nanti.",
+"Jangan paksa diri.",
+"Hari ini sudah cukup."
+]}
+};
+
+function showMood(){
+const input=document.getElementById("moodInput").value.toLowerCase();
+const box=document.getElementById("moodBox");
+const inputArea=document.getElementById("inputArea");
+
+let moodData=moods.bad;
+
+if(input.includes("senang")||input.includes("bahagia")) moodData=moods.happy;
+else if(input.includes("capek")) moodData=moods.tired;
+else if(input.includes("sedih")) moodData=moods.sad;
+else if(input.includes("kesel")||input.includes("marah")) moodData=moods.angry;
+else if(input.includes("bad")) moodData=moods.bad;
+
+const randomText = moodData.texts[Math.floor(Math.random()*20)];
+
+box.className="mood-box "+moodData.class;
+box.innerText=randomText;
+
+inputArea.style.display="none";
+box.style.display="block";
+
+// AUTO KE PENUTUP
+setTimeout(()=>{window.location.href="seeu.html";},3500);
+}
+</script>
+
+</body>
+</html>
